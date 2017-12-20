@@ -99,7 +99,10 @@ async def on_ready():
 
 @bot.command(pass_context=True)
 async def help(ctx):
-    await bot.delete_message(ctx.message)
+    try:
+        await bot.delete_message(ctx.message)
+    except:
+        pass
 
     msg = open('cogs/utils/help.txt').read().replace('\\u200b','\u200b').splitlines()
     for i, line in enumerate(msg): 
