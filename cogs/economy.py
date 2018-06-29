@@ -8,7 +8,7 @@ class Economy():
 		
 
 	@commands.command()
-	async def openaccount(self, ctx):
+	async def register(self, ctx):
 		with open('cogs/utils/economy.json') as f:
 			data = json.load(f)
 		if str(ctx.author.id) not in data:
@@ -20,13 +20,13 @@ class Economy():
 			data[str(ctx.author.id)]["servers"][ctx.guild.name]["id"] = ctx.guild.id
 			data[str(ctx.author.id)]["servers"][ctx.guild.name]["balance"] = 200
 		else:
-			await ctx.send("You've already opened an account silly")
+			await ctx.send("You've already opened an account.")
 		data = json.dumps(data, indent=4)
 		with open('cogs/utils/economy.json', 'w') as f:
 			f.write(data)
 
 	@commands.command()
-	async def balance(self, ctx):
+	async def bal(self, ctx):
 		with open('cogs/utils/economy.json') as f:
 			data = json.load(f)
 		if str(ctx.author.id) in data:
@@ -37,7 +37,7 @@ class Economy():
 				embed = discord.Embed(title="Balance", description=f"0 Darkness Chips <:Darkness:411673568170999808>", color=discord.Color.blue())
 				await ctx.send(embed=embed)
 		else:
-			await ctx.send("You haven't opened an account yet. To do so run the openaccount command.")
+			await ctx.send("You haven't opened an account yet. Repeat this command after doing d.register")
 
 
 def setup(bot):
