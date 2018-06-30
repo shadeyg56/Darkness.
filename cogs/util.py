@@ -7,10 +7,10 @@ class Utils():
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command()
+	@commands.command(aliases=arole)
 	@commands.has_permissions(manage_roles=True)
-	async def addrank(self, ctx, *, rank: str):
-		"""Add a rank that members can give themselves"""
+	async def addrole(self, ctx, *, rank: str):
+		"""Add a role that members can give themselves"""
 		with open("cogs/utils/servers.json") as f:
 			data = json.load(f)
 		role = discord.utils.find(lambda m: rank.lower() in m.name.lower(), ctx.guild.roles)
@@ -22,7 +22,7 @@ class Utils():
 			data[str(ctx.guild.id)]["ranks"][str(role.name)] = str(role.name)
 			await ctx.send(f"Added {role.name} as a rank")
 		elif rank in data[str(ctx.guild.id)]:
-			await ctx.send("That rank already exists")
+			await ctx.send("That rrole already exists")
 		else:
 			await ctx.guild.create_role(name=rank)
 			data[str(ctx.guild.id)]["ranks"][rank] = rank
@@ -31,10 +31,10 @@ class Utils():
 		with open("cogs/utils/servers.json", "w") as f:
 			f.write(data)
 
-	@commands.command()
+	@commands.command(aliases=rrole)
 	@commands.has_permissions(manage_roles=True)
-	async def removerank(self, ctx, *, rank: str):
-		"""Remove a rank that members can give themselves"""
+	async def removerole(self, ctx, *, rank: str):
+		"""Removes a role that members can give themselves"""
 		with open("cogs/utils/servers.json") as f:
 			data = json.load(f)
 		role = discord.utils.find(lambda m: rank.lower() in m.name.lower(), ctx.guild.roles)
@@ -48,8 +48,8 @@ class Utils():
 			f.write(data)
 
 	@commands.command()
-	async def ranks(self, ctx):
-		"""View all ranks in your server"""
+	async def roles(self, ctx):
+		"""View all roles in your server"""
 		with open("cogs/utils/servers.json") as f:
 			data = json.load(f)
 		if str(ctx.guild.id) in data:
@@ -61,21 +61,21 @@ class Utils():
 		else:
 			await ctx.send("This server has no ranks")
 
-	@commands.command(aliases=["rank"])
-	async def iam(self, ctx, *, rank):
-		"""Add a server rank to yourself"""
+	@commands.command(aliases=["amyself"])
+	async def addmyself(self, ctx, *, rank):
+		"""Add a role to yourself"""
 		with open("cogs/utils/servers.json") as f:
 			data = json.load(f)
 		if rank in data[str(ctx.guild.id)]["ranks"]:
 			role = discord.utils.find(lambda m: rank.lower() in m.name.lower(), ctx.guild.roles)
 			if role in ctx.author.roles:
 				await ctx.author.remove_roles(role)
-				await ctx.send('You already had that rank, so I went ahead and removed it. Just repeat the command to get it back at anytime.')
+				await ctx.send('You already had that role, so I went ahead and removed it. Just repeat the command to get it back at anytime.')
 			else:
 				await ctx.author.add_roles(role)
-				await ctx.send(f"I gave you the {rank} rank")
+				await ctx.send(f"I gave you the {rank} role")
 		else:
-			await ctx.send("That rank does not exist")
+			await ctx.send("That role does not exist")
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
